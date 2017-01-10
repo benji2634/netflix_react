@@ -48,13 +48,10 @@
 	
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(158);
+	var NetflixContainer = __webpack_require__(159);
 	
 	window.onload = function () {
-	  ReactDOM.render(React.createElement(
-	    'h1',
-	    null,
-	    ' App Started '
-	  ), document.getElementById('app'));
+	  ReactDOM.render(React.createElement(NetflixContainer, null), document.getElementById('app'));
 	};
 
 /***/ },
@@ -19750,6 +19747,98 @@
 	
 	module.exports = __webpack_require__(3);
 
+
+/***/ },
+/* 159 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var Form = __webpack_require__(160);
+	// var FilmList = require('../components/FilmList.jsx');
+	
+	var NetflixContainer = React.createClass({
+	  displayName: 'NetflixContainer',
+	
+	  getInitialState: function getInitialState() {
+	    return {
+	      films: []
+	    };
+	  },
+	
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      { className: 'Netflix' },
+	      React.createElement(Form, null),
+	      React.createElement(FilmList, null)
+	    );
+	  }
+	
+	});
+	
+	module.exports = NetflixContainer;
+
+/***/ },
+/* 160 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	
+	var Form = React.createClass({
+	  displayName: 'Form',
+	
+	  getInitialState: function getInitialState() {
+	    return { text: '' };
+	  },
+	
+	  handleTextChange: function handleTextChange(event) {
+	    this.setState({ text: event.target.value });
+	  },
+	
+	  handleSubmit: function handleSubmit(event) {
+	    event.preventDefault();
+	    var text = this.state.author.trim();
+	    if (!text) {
+	      return;
+	    }
+	    this.props.onFormSubmit({ text: text });
+	    var url = 'http://netflixroulette.net/api/api.php?actor=' + { text: text };
+	    var request = new XMLHttpRequest();
+	    request.open('GET', url);
+	    request.onload = function () {
+	      var data = JSON.parse(request.responseText);
+	      //TO DO send data up to top level
+	      this.setState({ films: data });
+	    }.bind(this);
+	    request.send();
+	
+	    this.setState({ text: '' });
+	  },
+	
+	  render: function render() {
+	    return React.createElement(
+	      'form',
+	      {
+	        className: 'search-form',
+	        onSubmit: this.handleSubmit
+	      },
+	      React.createElement('input', {
+	        type: 'text',
+	        placeholder: 'Enter name of actor...',
+	        value: this.state.text,
+	        onChange: this.handleTextChange
+	      }),
+	      React.createElement('input', { type: 'submit', value: 'Find films' })
+	    );
+	  }
+	
+	});
+	
+	module.exports = Form;
 
 /***/ }
 /******/ ]);
