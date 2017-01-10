@@ -11,22 +11,9 @@ var Form = React.createClass({
 
   handleSubmit: function (event) {
     event.preventDefault();
-    var text = this.state.author.trim();
+    var text = this.state.text.trim();
     if (!text) {return;}
-    this.props.onFormSubmit({text: text});
-    var url='http://netflixroulette.net/api/api.php?actor=' + {text};
-    var request = new XMLHttpRequest();
-    request.open('GET', url);
-    request.onload = function(){
-      var data = JSON.parse(request.responseText);
-      //TO DO send data up to top level
-      this.setState({films: data});
-    }.bind(this);
-    request.send();
-
-
-
-
+    this.props.onFormSubmit(text);
     this.setState({text: ''});
   },
 
@@ -37,13 +24,13 @@ var Form = React.createClass({
       onSubmit={this.handleSubmit}
       >
 
-      <input
-      type='text'
-      placeholder='Enter name of actor...'
-      value={this.state.text}
-      onChange={this.handleTextChange}
-      />
-      <input type='submit' value='Find films'/>
+        <input
+        type='text'
+        placeholder='Enter name of actor...'
+        value={this.state.text}
+        onChange={this.handleTextChange}
+        />
+        <input type='submit' value='Find films'/>
       </form>
       );
   }

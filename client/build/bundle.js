@@ -19756,7 +19756,7 @@
 	
 	var React = __webpack_require__(1);
 	var Form = __webpack_require__(160);
-	// var FilmList = require('../components/FilmList.jsx');
+	var FilmList = __webpack_require__(161);
 	
 	var NetflixContainer = React.createClass({
 	  displayName: 'NetflixContainer',
@@ -19771,9 +19771,21 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'Netflix' },
-	      React.createElement(Form, null),
+	      React.createElement(Form, { onFormSubmit: this.handleFormSubmit }),
 	      React.createElement(FilmList, null)
 	    );
+	  },
+	
+	  handleFormSubmit: function handleFormSubmit(text) {
+	    var url = 'http://netflixroulette.net/api/api.php?actor=' + text;
+	    var request = new XMLHttpRequest();
+	    request.open('GET', url);
+	    request.onload = function () {
+	      var data = JSON.parse(request.responseText);
+	      //TO DO send data up to top level
+	      this.setState({ films: data });
+	    }.bind(this);
+	    request.send();
 	  }
 	
 	});
@@ -19801,21 +19813,11 @@
 	
 	  handleSubmit: function handleSubmit(event) {
 	    event.preventDefault();
-	    var text = this.state.author.trim();
+	    var text = this.state.text.trim();
 	    if (!text) {
 	      return;
 	    }
-	    this.props.onFormSubmit({ text: text });
-	    var url = 'http://netflixroulette.net/api/api.php?actor=' + { text: text };
-	    var request = new XMLHttpRequest();
-	    request.open('GET', url);
-	    request.onload = function () {
-	      var data = JSON.parse(request.responseText);
-	      //TO DO send data up to top level
-	      this.setState({ films: data });
-	    }.bind(this);
-	    request.send();
-	
+	    this.props.onFormSubmit(text);
 	    this.setState({ text: '' });
 	  },
 	
@@ -19839,6 +19841,50 @@
 	});
 	
 	module.exports = Form;
+
+/***/ },
+/* 161 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	
+	var FilmList = React.createClass({
+	  displayName: 'FilmList',
+	
+	
+	  getInitialState: function getInitialState() {
+	    return { films: [] };
+	  },
+	
+	  render: function render() {
+	    if (!this.props.films) {
+	      return React.createElement(
+	        'h4',
+	        null,
+	        'No film selected'
+	      );
+	    };
+	
+	    var films = this.props.films.map(function (film) {
+	      return React.createElement(
+	        'p',
+	        null,
+	        film.show_title
+	      );
+	    });
+	
+	    return React.createElement(
+	      'div',
+	      null,
+	      films
+	    );
+	  }
+	
+	});
+	
+	module.exports = FilmList;
 
 /***/ }
 /******/ ]);
