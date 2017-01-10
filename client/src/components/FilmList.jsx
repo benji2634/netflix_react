@@ -13,13 +13,12 @@ var FilmList = React.createClass({
 
     var films = this.props.films.map(function(film){
       return (
-       <p>{film.show_title}</p>)
+       <p>{film.show_title}</p>
+       );
    });
   
   return (
-    <div>
-    {films}
-    </div>
+    <div>{films}</div>
     );
 }
 

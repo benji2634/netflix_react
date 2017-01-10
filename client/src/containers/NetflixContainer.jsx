@@ -13,7 +13,7 @@ var NetflixContainer = React.createClass({
     return (
         <div className='Netflix'>
           <Form onFormSubmit={this.handleFormSubmit}/>
-          <FilmList />
+          <FilmList films={this.state.films}/>
         </div>
       )
   },

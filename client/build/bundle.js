@@ -19772,7 +19772,7 @@
 	      'div',
 	      { className: 'Netflix' },
 	      React.createElement(Form, { onFormSubmit: this.handleFormSubmit }),
-	      React.createElement(FilmList, null)
+	      React.createElement(FilmList, { films: this.state.films })
 	    );
 	  },
 	
